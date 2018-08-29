@@ -28,8 +28,7 @@ mkdir -p ${SOONG_OUT}
 cat > ${SOONG_OUT}/soong.variables << EOF
 {
     "Allow_missing_dependencies": true,
-    "HostArch":"x86_64",
-    "HostSecondaryArch":"x86"
+    "HostArch":"x86_64"
 }
 EOF
 SOONG_BINARIES=(
