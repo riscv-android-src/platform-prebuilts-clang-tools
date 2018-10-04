@@ -89,6 +89,9 @@ mkdir -p "${SOONG_OUT}/dist/bin"
 cp "${binaries[@]}" "${SOONG_OUT}/dist/bin/"
 cp -R "${SOONG_HOST_OUT}/lib"* "${SOONG_OUT}/dist/"
 
+# Copy clang headers
+cp -R "external/clang/lib/Headers" "${SOONG_OUT}/dist/clang-headers"
+
 # Package binaries and shared libs
 (
     cd "${SOONG_OUT}/dist"
