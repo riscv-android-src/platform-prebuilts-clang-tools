@@ -19,20 +19,8 @@ if [ -z "${OUT_DIR}" ]; then
     exit 1
 fi
 
-if [ ! -e "build/envsetup.sh" ]; then
-    echo "error: Current working directory must be ANDROID_BUILD_TOP"
-    exit 1
-fi
+TOP=$(pwd)
 
-TOP="$(pwd)"
-
-# Read PLATFORM_SDK_VERSION
-set +x
-source "build/envsetup.sh"
-PLATFORM_SDK_VERSION="$(get_build_var PLATFORM_SDK_VERSION)"
-set -x
-
-# Read OS name
 UNAME="$(uname)"
 case "${UNAME}" in
 Linux)
@@ -55,16 +43,7 @@ mkdir -p "${SOONG_OUT}"
 cat > "${SOONG_OUT}/soong.variables" << __EOF__
 {
     "Allow_missing_dependencies": true,
-
-    "HostArch":"x86_64",
-
-    "DeviceAbi": ["arm64-v8a"],
-    "DeviceArch":"arm64",
-    "DeviceArchVariant": "armv8-a",
-    "DeviceCpuVariant": "generic",
-    "DeviceName": "generic_arm64",
-
-    "Platform_sdk_version": ${PLATFORM_SDK_VERSION}
+    "HostArch":"x86_64"
 }
 __EOF__
 
