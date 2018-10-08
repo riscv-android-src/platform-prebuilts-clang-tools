@@ -70,6 +70,8 @@ cp -R "${SOONG_HOST_OUT}/lib"* "${SOONG_OUT}/dist/"
 
 # Copy clang headers
 cp -R "external/clang/lib/Headers" "${SOONG_OUT}/dist/clang-headers"
+cp "prebuilts/clang/host/${OS}-x86/clang-3289846/lib64/clang/3.8/include/arm_neon.h" "${SOONG_OUT}/dist/clang-headers"
+rm "${SOONG_OUT}/dist/clang-headers/CMakeLists.txt"
 
 # Package binaries and shared libs
 (
