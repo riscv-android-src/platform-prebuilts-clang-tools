@@ -60,8 +60,13 @@ for name in "${SOONG_BINARIES[@]}"; do
     binaries+=("${SOONG_HOST_OUT}/bin/${name}")
 done
 
+libs=()
+if [ "${OS}" = "darwin" ]; then
+    libs+=("${SOONG_HOST_OUT}/lib64/libc++abi_host.dylib")
+fi
+
 # Build binaries and shared libs
-build/soong/soong_ui.bash --make-mode --skip-make "${binaries[@]}"
+build/soong/soong_ui.bash --make-mode --skip-make "${binaries[@]}" "${libs[@]}"
 
 # Copy binaries and shared libs
 mkdir -p "${SOONG_OUT}/dist/bin"
