@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+export LLVM_BUILD_HOST_TOOLS=true
+export LLVM_PREBUILTS_VERSION=clang-r339409b
+export LLVM_RELEASE_VERSION=8.0.2
+
 if [ -z "${OUT_DIR}" ]; then
     echo "error: Must set OUT_DIR"
     exit 1
@@ -74,9 +78,33 @@ cp "${binaries[@]}" "${SOONG_OUT}/dist/bin/"
 cp -R "${SOONG_HOST_OUT}/lib"* "${SOONG_OUT}/dist/"
 
 # Copy clang headers
-cp -R "external/clang/lib/Headers" "${SOONG_OUT}/dist/clang-headers"
-cp "prebuilts/clang/host/${OS}-x86/clang-3289846/lib64/clang/3.8/include/arm_neon.h" "${SOONG_OUT}/dist/clang-headers"
-rm "${SOONG_OUT}/dist/clang-headers/CMakeLists.txt"
+cp -R "prebuilts/clang/host/${OS}-x86/${LLVM_PREBUILTS_VERSION}/lib64/clang/${LLVM_RELEASE_VERSION}/include" "${SOONG_OUT}/dist/clang-headers"
+
+# Normalize library file names.  All library file names must match their soname.
+function extract_soname () {
+    local file="$1"
+
+    case "${OS}" in
+    linux)
+        readelf -d "${file}" | \
+            grep '(SONAME)\s*Library soname: \[.*\]$' -o | \
+            sed 's/(SONAME)\s*Library soname: \[\(.*\)\]$/\1/g'
+        ;;
+    darwin)
+        local install_path="$(otool -D "${file}" | sed -n 2p)"
+        if [ -n "${install_path}" ]; then
+            basename "${install_path}"
+        fi
+        ;;
+    esac
+}
+
+for file in "${SOONG_OUT}/dist/lib"*"/"*; do
+    soname="$(extract_soname "${file}")"
+    if [ -n "${soname}" -a "$(basename "${file}")" != "${soname}" ]; then
+        mv "${file}" "$(dirname "${file}")/${soname}"
+    fi
+done
 
 # Package binaries and shared libs
 (
