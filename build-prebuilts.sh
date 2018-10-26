@@ -18,6 +18,9 @@ export LLVM_BUILD_HOST_TOOLS=true
 export LLVM_PREBUILTS_VERSION=clang-r339409b
 export LLVM_RELEASE_VERSION=8.0.2
 
+# FIXME: Workaround to build bionic versioner in the aosp/clang-tools branch.
+export FORCE_BUILD_LLVM_COMPONENTS=true
+
 if [ -z "${OUT_DIR}" ]; then
     echo "error: Must set OUT_DIR"
     exit 1
@@ -57,6 +60,7 @@ SOONG_BINARIES=(
     "header-abi-dumper"
     "header-abi-diff"
     "merge-abi-diff"
+    "versioner"
 )
 
 binaries=()
