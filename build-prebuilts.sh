@@ -77,12 +77,19 @@ fi
 build/soong/soong_ui.bash --make-mode --skip-make "${binaries[@]}" "${libs[@]}"
 
 # Copy binaries and shared libs
-mkdir -p "${SOONG_OUT}/dist/bin"
-cp "${binaries[@]}" "${SOONG_OUT}/dist/bin/"
-cp -R "${SOONG_HOST_OUT}/lib"* "${SOONG_OUT}/dist/"
+SOONG_DIST="${SOONG_OUT}/dist"
+mkdir -p "${SOONG_DIST}/bin"
+cp "${binaries[@]}" "${SOONG_DIST}/bin"
+cp -R "${SOONG_HOST_OUT}/lib"* "${SOONG_DIST}"
 
-# Copy clang headers
-cp -R "prebuilts/clang/host/${OS}-x86/${LLVM_PREBUILTS_VERSION}/lib64/clang/${LLVM_RELEASE_VERSION}/include" "${SOONG_OUT}/dist/clang-headers"
+# Copy clang header and share files
+CLANG_DIR="prebuilts/clang/host/${OS}-x86/${LLVM_PREBUILTS_VERSION}"
+CLANG_LIB_DIR="${CLANG_DIR}/lib64/clang/${LLVM_RELEASE_VERSION}"
+CLANG_LIB_DIR_OUT="${SOONG_DIST}/lib64/clang/${LLVM_RELEASE_VERSION}"
+mkdir -p "${CLANG_LIB_DIR_OUT}"
+cp -R "${CLANG_LIB_DIR}/share" "${CLANG_LIB_DIR_OUT}/share"
+cp -R "${CLANG_LIB_DIR}/include" "${CLANG_LIB_DIR_OUT}/include"
+ln -s "lib64/clang/${LLVM_RELEASE_VERSION}/include" "${SOONG_DIST}/clang-headers"
 
 # Normalize library file names.  All library file names must match their soname.
 function extract_soname () {
