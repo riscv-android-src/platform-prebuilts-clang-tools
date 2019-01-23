@@ -15,8 +15,8 @@
 # limitations under the License.
 
 export LLVM_BUILD_HOST_TOOLS=true
-export LLVM_PREBUILTS_VERSION=clang-r346389b
-export LLVM_RELEASE_VERSION=8.0.6
+export LLVM_PREBUILTS_VERSION=clang-r346389c
+export LLVM_RELEASE_VERSION=8.0.7
 
 # FIXME: Workaround to build bionic versioner in the aosp/clang-tools branch.
 export FORCE_BUILD_LLVM_COMPONENTS=true
