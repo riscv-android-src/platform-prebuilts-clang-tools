@@ -16,7 +16,7 @@
 
 export LLVM_BUILD_HOST_TOOLS=true
 export LLVM_PREBUILTS_VERSION=clang-r353983b
-export LLVM_RELEASE_VERSION=9.0.1
+export LLVM_RELEASE_VERSION=9.0.2
 
 # FIXME: Workaround to build bionic versioner in the aosp/clang-tools branch.
 export FORCE_BUILD_LLVM_COMPONENTS=true
